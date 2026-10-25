@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: vw_kpi_overview
+    description: "Indicadores executivos consolidados do catálogo, audiência, avaliações e estudo de recomendações."
+  - name: vw_ratings_heatmap_monthly
+    description: "Série histórica mensal (Ano x Mês) para o Heatmap de evolução de ratings."
+  - name: vw_top_movies_ranking
+    description: "Ranking de filmes com >= 50 avaliações ordenável por Score Bayesiano ou volume total de votos."
+  - name: vw_movies_popularity_vs_quality
+    description: "Dispersão (Scatter Plot) de popularidade vs. qualidade dos filmes com classificação em 4 quadrantes."
+  - name: vw_genre_popularity_quality
+    description: "Métricas consolidadas por gênero para os gráficos de barras e dispersão de gêneros."
+  - name: vw_user_activity_summary
+    description: "Tabela analítica de atividade, média, consistência e retenção por usuário."
+  - name: vw_recsys_belief_vs_reality
+    description: "Comparativo de assertividade (MAE) entre o algoritmo de recomendação e a expectativa humana por canal."
+  - name: vw_recsys_certainty_calibration
+    description: "Análise de convergência entre expectativa do usuário e algoritmo por nível de certeza (1 a 5)."
+

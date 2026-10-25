@@ -1,0 +1,19 @@
+version: 2
+
+unit_tests:
+  - name: test_dim_movies_bayesian_weighted_score
+    description: "Verifica cálculo do score Bayesiano ponderado e fallback de filmes sem avaliações."
+    model: dim_movies
+    given:
+      - input: ref('stg_movies')
+        rows:
+          - {movie_id: 10, title: "Hit Movie (2023)", clean_title: "Hit Movie", release_year: 2023, release_decade: 2020, genres_raw: "Drama", primary_genre: "Drama", is_no_genre: false}
+          - {movie_id: 20, title: "New Unrated (2024)", clean_title: "New Unrated", release_year: 2024, release_decade: 2020, genres_raw: null, primary_genre: "Unclassified", is_no_genre: true}
+      - input: ref('int_movie_metrics')
+        rows:
+          - {movie_id: 10, total_ratings: 50, unique_users: 50, avg_rating: 4.5, stddev_rating: 0.4, first_rating_date: "2023-05-01", last_rating_date: "2024-01-10"}
+    expect:
+      rows:
+        - {movie_id: 10, clean_title: "Hit Movie", genres_list: "Drama", total_ratings: 50, avg_rating: 4.5, bayesian_weighted_score: 4.5}
+        - {movie_id: 20, clean_title: "New Unrated", genres_list: "Unclassified", total_ratings: 0, avg_rating: null, bayesian_weighted_score: null}
+

@@ -1,0 +1,40 @@
+name: "dbt_netflix"
+version: "1.0.0"
+config-version: 2
+
+profile: "dbt_netflix"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  # Mantém expiração das tabelas em 1400h (~58 dias) compatível com BigQuery Sandbox (máx. 60 dias)
+  # e evita perda de dados históricos (1995-2024) causada por partition_expiration de 60 dias no Sandbox.
+  is_bigquery_sandbox: true
+  sandbox_hours_to_expiration: 1400
+
+models:
+  dbt_netflix:
+    staging:
+      +materialized: view
+      +tags: ["bronze", "staging"]
+    intermediate:
+      +materialized: view
+      +tags: ["silver", "intermediate"]
+    marts:
+      core:
+        +materialized: table
+        +hours_to_expiration: 1400
+        +tags: ["gold", "star_schema"]
+      analytics:
+        +materialized: view
+        +tags: ["gold", "bi_views"]
+

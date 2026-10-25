@@ -1,0 +1,100 @@
+version: 2
+
+sources:
+  - name: netflix_raw
+    description: >
+      Camada Raw / Bronze no Google BigQuery contendo os 6 arquivos originais do
+      MovieLens Beliefs Dataset 2024 ingeridos em formato Apache Parquet (colunas em STRING).
+    database: "{{ env_var('GCP_PROJECT_ID', 'netflix-analytics-de') }}"
+    schema: "{{ env_var('BQ_RAW_DATASET', 'netflix_raw') }}"
+    tables:
+      - name: movies
+        description: "Catálogo de filmes com título original (incluindo ano entre parênteses) e gêneros separados por '|'."
+        columns:
+          - name: movieId
+            description: "Identificador único do filme na base MovieLens (STRING bruta)."
+          - name: title
+            description: "Título bruto do filme contendo o ano de lançamento no formato 'Título (YYYY)'."
+          - name: genres
+            description: "Lista de gêneros separados por '|' ou marcador '(no genres listed)'."
+          - name: _ingested_at
+            description: "Timestamp ISO UTC da conversão/ingestão no Data Lake."
+          - name: _source_file
+            description: "Nome do arquivo CSV original."
+
+      - name: user_rating_history
+        description: "Histórico principal de avaliações reais atribuídas pelos usuários aos filmes assistidos."
+        columns:
+          - name: userId
+            description: "Identificador anônimo do usuário."
+          - name: movieId
+            description: "Identificador do filme avaliado."
+          - name: rating
+            description: "Nota atribuída pelo usuário (escala 0.5 a 5.0 em STRING bruta)."
+          - name: tstamp
+            description: "Data/hora ou timestamp em que a avaliação foi registrada."
+
+      - name: ratings_for_additional_users
+        description: "Avaliações complementares de usuários adicionais incluídos na Release 2 do estudo MovieLens Beliefs."
+        columns:
+          - name: userId
+            description: "Identificador anônimo do usuário."
+          - name: movieId
+            description: "Identificador do filme avaliado."
+          - name: rating
+            description: "Nota atribuída pelo usuário (0.5 a 5.0)."
+          - name: tstamp
+            description: "Data/hora em que a avaliação adicional foi registrada."
+
+      - name: belief_data
+        description: >
+          Tabela central de expectativas (beliefs): registra a nota que o usuário acreditava que daria
+          antes de assistir, grau de certeza, nota real caso já tenha visto e nota prevista pelo sistema.
+        columns:
+          - name: userId
+            description: "Identificador anônimo do usuário."
+          - name: movieId
+            description: "Identificador do filme apresentado."
+          - name: isSeen
+            description: "Indicador de consumo: -1 (não respondeu), 0 (não assistiu), 1 (já assistiu)."
+          - name: watchDate
+            description: "Data aproximada em que o usuário assistiu ao filme (preenchida quando isSeen = 1)."
+          - name: userElicitRating
+            description: "Nota real reportada pelo usuário na elicitação quando já havia assistido (0.5 a 5.0)."
+          - name: userPredictRating
+            description: "Expectativa de nota prevista pelo próprio usuário antes de assistir (0.5 a 5.0)."
+          - name: userCertainty
+            description: "Grau de confiança do usuário na sua expectativa de nota (1 a 5)."
+          - name: tstamp
+            description: "Momento do registro da resposta."
+          - name: movie_idx
+            description: "Índice mensal da rodada do estudo de elicitação (nomeado movie_idx no CSV oficial GroupLens)."
+          - name: source
+            description: "Bucket de amostragem da elicitação (1=Amostragem Ampla, 2=Recomendação Potencial, 3=Novos Filmes)."
+          - name: systemPredictRating
+            description: "Nota prevista pelo motor de recomendação do sistema para o par usuário-filme."
+
+      - name: movie_elicitation_set
+        description: "Conjunto de filmes selecionados em cada rodada mensal do experimento por estratégia de descoberta."
+        columns:
+          - name: movieId
+            description: "Identificador do filme."
+          - name: month_idx
+            description: "Índice do mês em que o filme integrou o conjunto de elicitação."
+          - name: source
+            description: "Código da estratégia de seleção (1 a 5)."
+          - name: tstamp
+            description: "Momento de apresentação/inclusão."
+
+      - name: user_recommendation_history
+        description: "Histórico de impressões de filmes recomendados pelo algoritmo aos usuários."
+        columns:
+          - name: userId
+            description: "Identificador do usuário impactado."
+          - name: tstamp
+            description: "Momento da recomendação."
+          - name: movieId
+            description: "Identificador do filme recomendado."
+          - name: predictedRating
+            description: "Nota prevista pelo algoritmo no momento da recomendação."
+

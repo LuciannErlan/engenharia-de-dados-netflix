@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: stg_movies
+    description: "Catálogo padronizado de filmes com título limpo, ano de lançamento extraído via Regex e array de gêneros."
+    columns:
+      - name: movie_id
+        description: "Chave primária inteira do filme."
+        data_tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Título original completo conforme publicado na base MovieLens."
+        data_tests:
+          - not_null
+      - name: clean_title
+        description: "Título limpo sem o sufixo '(YYYY)'."
+        data_tests:
+          - not_null
+      - name: release_year
+        description: "Ano de lançamento extraído do título via expressão regular."
+      - name: primary_genre
+        description: "Primeiro gênero listado para o filme (ou 'Unclassified' quando ausente)."
+        data_tests:
+          - not_null
+
+  - name: stg_ratings
+    description: "Avaliações reais deduplicadas (histórico + adicionais) na escala oficial de 0.5 a 5.0 estrelas."
+    columns:
+      - name: user_id
+        description: "Identificador numérico do usuário."
+        data_tests:
+          - not_null
+      - name: movie_id
+        description: "Identificador numérico do filme avaliado."
+        data_tests:
+          - not_null
+      - name: rating
+        description: "Nota atribuída pelo usuário entre 0.5 e 5.0."
+        data_tests:
+          - not_null
+      - name: rating_ts
+        description: "Timestamp UTC da avaliação."
+        data_tests:
+          - not_null
+
+  - name: stg_beliefs
+    description: "Registros tratados de expectativas de avaliação (beliefs), consumo e previsão algorítmica."
+    columns:
+      - name: user_id
+        description: "Identificador numérico do usuário."
+        data_tests:
+          - not_null
+      - name: movie_id
+        description: "Identificador numérico do filme apresentado."
+        data_tests:
+          - not_null
+      - name: seen_status
+        description: "Classificação textual de visualização ('Já Assistiu', 'Não Assistiu', 'Não Respondeu')."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["Já Assistiu", "Não Assistiu", "Não Respondeu", "Desconhecido"]
+
+  - name: stg_elicitation_set
+    description: "Conjunto mensal de filmes utilizados na coleta de expectativas por estratégia de descoberta."
+    columns:
+      - name: movie_id
+        description: "Identificador do filme."
+        data_tests:
+          - not_null
+
+  - name: stg_recommendations
+    description: "Impressões de recomendações do sistema com nota prevista."
+    columns:
+      - name: user_id
+        description: "Identificador do usuário."
+        data_tests:
+          - not_null
+      - name: movie_id
+        description: "Identificador do filme recomendado."
+        data_tests:
+          - not_null
+

@@ -1,0 +1,16 @@
+version: 2
+
+unit_tests:
+  - name: test_stg_movies_regex_and_genres_cleaning
+    description: "Valida extração de ano via Regex, limpeza de título e tratamento de '(no genres listed)'."
+    model: stg_movies
+    given:
+      - input: source('netflix_raw', 'movies')
+        rows:
+          - {movieId: "1", title: "Toy Story (1995)", genres: "Adventure|Animation", _ingested_at: "2026-10-25T10:00:00Z"}
+          - {movieId: "2", title: "Untitled Documentary", genres: "(no genres listed)", _ingested_at: "2026-10-25T10:00:00Z"}
+    expect:
+      rows:
+        - {movie_id: 1, clean_title: "Toy Story", release_year: 1995, release_decade: 1990, primary_genre: "Adventure", is_no_genre: false}
+        - {movie_id: 2, clean_title: "Untitled Documentary", release_year: null, release_decade: null, primary_genre: "Unclassified", is_no_genre: true}
+

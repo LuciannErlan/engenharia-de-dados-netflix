@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_movie_genres
+    description: "Relacionamento N:N explodido entre filmes e seus respectivos gêneros."
+    columns:
+      - name: movie_id
+        description: "Chave do filme."
+        data_tests:
+          - not_null
+      - name: genre_name
+        description: "Nome padronizado do gênero."
+        data_tests:
+          - not_null
+
+  - name: int_movie_metrics
+    description: "Métricas pré-agregadas de volume, nota média e desvio padrão por filme."
+    columns:
+      - name: movie_id
+        description: "Chave única do filme avaliado."
+        data_tests:
+          - unique
+          - not_null
+

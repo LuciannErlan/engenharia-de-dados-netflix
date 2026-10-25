@@ -1,0 +1,124 @@
+version: 2
+
+models:
+  - name: dim_movies
+    description: "Dimensão de Filmes (Star Schema) contendo atributos limpos, ano, década, gêneros e score Bayesiano."
+    columns:
+      - name: movie_id
+        description: "Chave primária do filme."
+        data_tests:
+          - unique
+          - not_null
+      - name: clean_title
+        description: "Título do filme sem ano."
+        data_tests:
+          - not_null
+      - name: primary_genre
+        description: "Gênero principal do filme."
+        data_tests:
+          - not_null
+
+  - name: dim_genres
+    description: "Dimensão de Gêneros cinematográficos únicos."
+    columns:
+      - name: genre_sk
+        description: "Chave substituta MD5 do gênero."
+        data_tests:
+          - unique
+          - not_null
+      - name: genre_name
+        description: "Nome do gênero."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: bridge_movie_genres
+    description: "Tabela ponte resolvendo o relacionamento N:N entre filmes e gêneros."
+    columns:
+      - name: movie_genre_sk
+        description: "Chave substituta da combinação filme-gênero."
+        data_tests:
+          - unique
+          - not_null
+      - name: movie_id
+        description: "Chave estrangeira para dim_movies."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_movies')
+                field: movie_id
+
+  - name: dim_users
+    description: "Dimensão comportamental de usuários com métricas de engajamento e tier de atividade."
+    columns:
+      - name: user_id
+        description: "Chave primária do usuário."
+        data_tests:
+          - unique
+          - not_null
+      - name: activity_tier
+        description: "Segmento comportamental baseado em volume de avaliações."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - "Power Reviewer (500+)"
+                  - "Heavy Watcher (100-499)"
+                  - "Engaged (20-99)"
+                  - "Casual (<20)"
+
+  - name: dim_date
+    description: "Dimensão de calendário cobrindo todo o período histórico das avaliações."
+    columns:
+      - name: date_key
+        description: "Chave inteira no formato YYYYMMDD."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fact_ratings
+    description: "Tabela Fato de avaliações reais dos usuários nos filmes (clusterizada por movie_id e user_id)."
+    columns:
+      - name: rating_sk
+        description: "Chave substituta única da avaliação."
+        data_tests:
+          - unique
+          - not_null
+      - name: movie_id
+        description: "Chave estrangeira para dim_movies."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_movies')
+                field: movie_id
+      - name: user_id
+        description: "Chave estrangeira para dim_users."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: user_id
+      - name: rating
+        description: "Nota de 0.5 a 5.0 estrelas."
+        data_tests:
+          - not_null
+
+  - name: fact_beliefs
+    description: "Tabela Fato de expectativas de avaliação (beliefs), consumo e assertividade de recomendação."
+    columns:
+      - name: belief_sk
+        description: "Chave substituta do registro de elicitação."
+        data_tests:
+          - not_null
+      - name: movie_id
+        description: "Chave estrangeira para dim_movies."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_movies')
+                field: movie_id
+

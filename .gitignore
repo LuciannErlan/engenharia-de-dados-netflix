@@ -1,0 +1,37 @@
+# Python & Ambientes Virtuais
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Dados Locais & Cache (nunca versionar datasets pesados)
+data/raw/*
+data/landing/*
+!data/raw/.gitkeep
+!data/landing/.gitkeep
+
+# Nota: data/gold_cache/*.parquet PODE ser versionado opcionalmente caso deseje deploy zero-config no Streamlit Cloud
+
+# Credenciais e Segredos (CRÍTICO: nunca subir chaves GCP!)
+.env
+*service-account*.json
+*credentials*.json
+secrets/
+.streamlit/secrets.toml
+
+# Artefatos gerados pelo dbt
+dbt_netflix/target/
+dbt_netflix/dbt_packages/
+dbt_netflix/logs/
+dbt_netflix/.user.yml
+
+# Volumes locais Docker / IDE / Sistema Operacional
+docker/pgdata/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,14 @@
+dbt_netflix:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID', 'netflix-analytics-de') }}"
+      dataset: "{{ env_var('BQ_ANALYTICS_DATASET', 'netflix_analytics') }}"
+      location: "{{ env_var('GCP_LOCATION', 'us-central1') }}"
+      threads: 4
+      job_execution_timeout_seconds: 300
+      job_retries: 2
+      priority: interactive
+
