@@ -59,7 +59,7 @@ Antes de publicar seu post, grave um vídeo curto (30–45s) ou tire 3 a 4 print
 > 📊 **Um insight real de Produto & ML encontrado nos dados:**
 > Ao cruzar expectativa prévia do usuário, predição do algoritmo (`MAE = 0,653 ★`) e nota real pós-consumo em +3 milhões de interações, descobrimos o **Paradoxo da Serendipidade**: recomendações fora da bolha recebem baixa expectativa inicial dos usuários (`2,16 ★` antes de assistir), mas atingem **`3,82 ★` de aprovação real** após o consumo — superando inclusive a nota prevista pelo próprio modelo (`3,54 ★`)!
 >
-> 🔗 **Repositório no GitHub:** [INSERIR LINK DO GITHUB]
+> 🔗 **Repositório no GitHub:** https://github.com/LuciannErlan/engenharia-de-dados-netflix
 > 🌐 **Data App Interativo (Streamlit):** [INSERIR LINK DO STREAMLIT CLOUD]
 >
 > *(Inspirado na aula base da Luiza Vieira / Dados Por Todos, expandido com Parquet colunar, dbt Core, testes automatizados, BI-as-Code e CI/CD.)*

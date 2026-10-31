@@ -6,7 +6,7 @@
 ![dbt Core](https://img.shields.io/badge/dbt_Core-Medallion_%26_Star_Schema-FF694B?logo=dbt&logoColor=white)
 ![Metabase](https://img.shields.io/badge/Metabase-Docker_BI-509EE3?logo=metabase&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Data_App-FF4B4B?logo=streamlit&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
+[![Data Pipeline CI](https://github.com/LuciannErlan/engenharia-de-dados-netflix/actions/workflows/ci.yml/badge.svg)](https://github.com/LuciannErlan/engenharia-de-dados-netflix/actions/workflows/ci.yml)
 
 Plataforma analítica **end-to-end (ELT)** construída para modelar comportamento de audiência em catálogos de streaming e avaliar a assertividade de algoritmos de recomendação utilizando o dataset oficial **MovieLens Beliefs 2024** (*GroupLens Research — University of Minnesota*).
 
